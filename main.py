@@ -1,15 +1,25 @@
 from tkinter.filedialog import askopenfilename
+import pandas as pd
+import os
+
 
 def main():
-    book_path = askopenfilename()
+    
+    book_path = askopenfilename() # Point to file
     try:
         file_contents = get_book_text(book_path)
         print(f"File scanned at: {book_path}")
     except:
         print(f"File opening error")
 
-    word_count = count_words(file_contents)
-    character_dict = clean_dictionary(get_word_dictionary(file_contents))
+    word_count = get_word_count(file_contents)
+    word_dict = clean_dictionary(get_word_dictionary(file_contents))
+
+    # Save output csv with pandas
+    current_path = os.getcwd() 
+    output_file_name = current_path + "/output/" + str(int(os.path.getatime(book_path))) + ".csv" # Missing the actual file name eg "Frankenstein"
+    df = pd.DataFrame.from_dict(word_dict,"index")
+    df.to_csv(output_file_name)
 
 
 def get_book_text(path: str) -> str:
@@ -19,7 +29,7 @@ def get_book_text(path: str) -> str:
 
 def get_word_dictionary(text: str) -> dict:
     words_dict = {}
-    for word in text:
+    for word in text.split():
         if word not in words_dict:
             words_dict[word] = 1
         else:
@@ -28,7 +38,7 @@ def get_word_dictionary(text: str) -> dict:
     return words_dict
 
 
-def count_words(text: str) -> int:
+def get_word_count(text: str) -> int:
     words = text.split()
     return len(words)
 
@@ -44,7 +54,7 @@ def clean_dictionary(d: dict) -> dict:
     for element in d:        
             temp_dict["word"] = element 
             temp_dict["count"] = d[element]
-            list_of_dict.append(dict(letter=element,count=d[element])) # Append these 2 pair dictionaries to list
+            list_of_dict.append(dict(word=element,count=d[element])) # Append these 2 pair dictionaries to list
     
     # Sort on "count" pair
     list_of_dict.sort(reverse=True, key=sort_on)

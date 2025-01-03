@@ -23,7 +23,7 @@ def clean_dictionary(d: dict) -> dict:
             list_of_dict.append(dict(letter=element,count=d[element])) # Append these 2 pair dictionaries to list
     
     # Sort on "count" pair
-    list_of_dict.sort(reverse=True, key=sort_on)
+    list_of_dict.sort(reverse=True, key=sort_on) # type: ignore
 
     # Build a new dictionary only of letter:count pairs
     for i in range(len(list_of_dict)):
