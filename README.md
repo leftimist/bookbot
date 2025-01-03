@@ -1,2 +1,2 @@
 # bookbot
-BookBot is my first project!
+Bookbot is a "for-fun" coding project to analyze large text files
